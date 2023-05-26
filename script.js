@@ -1,4 +1,8 @@
-// script.js
+  //  const vobj=result.pagemap.videoobject;
+  //       const cnt=vobj[0].interactioncount;
+  //       if(vobj){}
+
+  // script.js
 const searchButton = document.getElementById('search-button');
 const searchInput = document.getElementById('search-input');
 const searchResults = document.getElementById('search-results');
@@ -19,6 +23,10 @@ searchButton.addEventListener('click', () => {
         console.log(data);
       // Display search results
       results && results.forEach(result => {
+        const vobj=result.pagemap.videoobject;
+         if (vobj && vobj.length > 0) {
+          const cnt=vobj[0].interactioncount;
+          const date=vobj[0].uploaddate;
         const img=result.pagemap.imageobject[0].url;
         console.log(img)
         const title = result.title;
@@ -27,25 +35,54 @@ searchButton.addEventListener('click', () => {
         const resultItem = document.createElement('div');
         resultItem.classList.add('result-item');
 
+        const imgItem = document.createElement('div');
+        imgItem.classList.add('img-item');
+
+        const textItem = document.createElement('div');
+        textItem.classList.add('text-item');
+
+
         const imgElement=document.createElement('img');
         imgElement.src=img;
         imgElement.alt='image';
-        imgElement.width='50';
-        imgElement.height='50';
+        imgElement.width='100';
+        imgElement.height='100';
+
+        const cntElement=document.createElement('p');
+        cntElement.innerHTML=formatViewsCount(cnt)+"</br>"+date;
 
         const titleElement = document.createElement('a');
-        titleElement.classList.add('result-title');
         titleElement.textContent = title;
         titleElement.href = url;
         titleElement.target = '_blank';
 
 
-        resultItem.appendChild(imgElement);
-        resultItem.appendChild(titleElement);
+        imgItem.appendChild(imgElement);
+
+        textItem.appendChild(titleElement);
+
+        textItem.appendChild(cntElement)
+
+        resultItem.appendChild(imgItem)
+        resultItem.appendChild(textItem)
+
         searchResults.appendChild(resultItem);
+        }
       });
     })
     .catch(error => {
       console.log('Error fetching search results:', error);
     });
 });
+
+function formatViewsCount(count) {
+  if (count >= 1e9) {
+    return (count / 1e9).toFixed(1) + 'B';
+  } else if (count >= 1e6) {
+    return (count / 1e6).toFixed(1) + 'M';
+  } else if (count >= 1e3) {
+    return (count / 1e3).toFixed(1) + 'K';
+  } else {
+    return count.toString();
+  }
+}

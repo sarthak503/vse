@@ -18,8 +18,15 @@
   #search-results {
     margin-top: 20px;
   }
-  .result-item{
+  .result-item {
+    display: flex;
+    margin: 10px;
+    padding: 10px;
+  }
+  .img-item{
+    display: flex;
+  }
+  .text-item{
     display: flex;
     flex-direction: column;
   }
-  
